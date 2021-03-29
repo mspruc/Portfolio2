@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class AdjacencyGraph {
   ArrayList<Vertex> vertices;
 
+
   public AdjacencyGraph(){
       vertices= new ArrayList<>();
   }
@@ -66,7 +67,7 @@ class Vertex implements Comparable<Vertex>{
     }
 }
 
-class Edge{
+class Edge implements Comparable<Edge> {
     Integer weight;
     Vertex from;
     Vertex to;
@@ -76,5 +77,10 @@ class Edge{
         this.to=to;
         this.weight=cost;
         this.from.addOutEdge(this);
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        return this.weight.compareTo(o.weight);
     }
 }
