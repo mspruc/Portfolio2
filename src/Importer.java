@@ -13,30 +13,35 @@ public class Importer {
 
     public Importer(String fileName) {
         try {
-            HashSet<String> testSet = new HashSet<String>();
-            PriorityQueue<Edge> test = new PriorityQueue<>();
+            HashSet<String> vertexSet = new HashSet<String>(); //set of all vertices
+            HashSet<Vertex> townSet = new HashSet<>();
+
             fileReader = new FileReader(fileName);
             this.fileName = fileName;
+
             Scanner scanner = new Scanner(fileReader);
             scanner.nextLine(); //skip first line :)
+
             while (scanner.hasNext()) {
                 String[] splitLine = scanner.nextLine().split(" ");
                 Edge edge = new Edge(splitLine[0],splitLine[1],Integer.parseInt(splitLine[2]));
 
-                testSet.add(splitLine[0]);
-                test.add(edge);
+                vertexSet.add(splitLine[0]);
             }
 
             ArrayList<Vertex> tempList = new ArrayList<>();
 
-            for (String string : testSet) {
+            for (String string : vertexSet) {
                 Vertex vertex = new Vertex(string, null);
                 tempList.add(vertex);
+                townSet.add(vertex);
             }
+
+            Graph graph = new Graph(townSet);
 
             //System.out.println(tempList.toString());
             //System.out.println(test.peek());
-            //System.out.println(testSet.toString());
+            //System.out.println(vertexSet.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("file could not be parsed");
