@@ -7,7 +7,7 @@ import java.util.*;
 public class Importer {
     String fileName = "";
     FileReader fileReader;
-    HashMap<String, Vertex> nameToVertex = new HashMap<>(); //map from town name to specific vertex.
+    public HashMap<String, Vertex> nameToVertex = new HashMap<>(); //map from town name to specific vertex.
     ArrayList<Edge> edges = new ArrayList<>(); //list of all edges.
 
     public Importer(String fileName) {
@@ -27,12 +27,17 @@ public class Importer {
                 fetchNewTown(nameToVertex, to); //
 
                 Edge edge = new Edge (nameToVertex.get(from),nameToVertex.get(to),cost); // create an edge between the 2 towns fetched from the map
+                Edge edge2 = new Edge (nameToVertex.get(to),nameToVertex.get(from),cost); //bidirectional
+
                 edges.add(edge); //add the edge to a list of edges
+                edges.add(edge2);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("file could not be parsed");
         }
+
+        System.out.println(nameToVertex.toString());
     }
 
     private void fetchNewTown(HashMap<String, Vertex> nameToVertex, String v) {

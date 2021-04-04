@@ -4,78 +4,82 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class MatrixGraph {
-    //int[][] matrixegdegraph;
-    //int[][] matrixweightgraph;
     ArrayList<Edge> edges;
     ArrayList<Vertex> vertices;
-    MatrixGraph(ArrayList<Edge> edges, ArrayList<Vertex> vertices) {
+    ArrayList<Edge> edgeTree = new ArrayList<>();
+
+    MatrixGraph(ArrayList<Edge> edges, AdjacencyGraph adjacencyGraph) {
         this.edges = edges;
-        this.vertices = vertices;
-       //matrixegdegraph   = new int[vertices][vertices];
-        //matrixweightgraph = new int[vertices][vertices];
+        this.vertices = adjacencyGraph.vertices;
     }
 
-    public void addEdge(int from, int to, int weight) {
-        //matrixegdegraph[from][to]=1;
-        //matrixweightgraph[from][to]=weight;
-    }
+    public void MST2ElECTRICBOOGALOO(){
 
-    public void MSTPrims(){
-        //int[] Distance    = new int[matrixegdegraph.length];
-        int[] predecessor = new int[edges.size()];
-        boolean[] visited = new boolean[edges.size()];
-        MinHeap<Vertex> Q   = new MinHeap<>();
-        PriorityQueue<Vertex> PQ = new PriorityQueue<>(); // offer (add) poll (extactmin)
+        MinHeap<Edge> edgeMinHeap = new MinHeap<>();
+        int treeDist = 0;                   //init tree distance as 0 so it can be fetched l8r
 
-        //Arrays.fill(Distance, Integer.MAX_VALUE);
-        Arrays.fill(predecessor,-1);
-        Arrays.fill(visited,false);
+        Vertex v = vertices.get(0); //fetch the arbitrary first town
+        v.isVisited = true;
 
-        //if (matrixegdegraph.length>0) Distance[0]=0;
-
-        for (Vertex vertex: vertices)
-        {
-            Q.Insert(vertex);
+        for (Edge edge : v.OutEdges) {
+            edgeMinHeap.insert(edge); //add all the edges from the vertex to the minheap
         }
 
-        int MST=0;
-        while(!Q.isEmpty()){
-            Vertex u = Q.extractMin();
-            for(int v=0;v<edges.size()-1;v++){
-                if(edges.get(v).weight<vertices.get(v).dist)
-                {
-                    if(!visited[v]) {
-                        vertices.get(v).dist = edges.get(v).weight;
-                        predecessor[v] = vertices.indexOf(u); //TODO find a better index
-                        int pos = Q.getPosition(vertices.get(v));
-                        Q.decreaseKey(pos);
-                    }
+        while(!edgeMinHeap.isEmpty()){
+            Edge bestEdge;                       //arbitrary edge init
+            bestEdge = edgeMinHeap.extractMin(); //get the smallest edge
+
+
+            if (!bestEdge.to.isVisited) {            //if the town is not visited
+                System.out.println(edgeMinHeap.minheap);
+                System.out.println();
+                System.out.println(bestEdge);
+                bestEdge.isFound = true;             //then edge is found
+                edgeTree.add(bestEdge);              //save the best edge in the MST
+                bestEdge.to.isVisited = true;        //the town is now visited
+
+                for (Edge edge : bestEdge.to.OutEdges) {
+                    edgeMinHeap.insert(edge);
                 }
             }
-            MST+=vertices.get(vertices.indexOf(u)).dist;
+
+              /*
+            for (Edge edge : v.OutEdges) {
+                System.out.println("out edge: " + edge);
+                System.out.println("weight: " + edge.weight);
+                System.out.println("dist saved in v: " + v.dist);
+                System.out.println("is to visitied: " + edge.to.isVisited);
+                System.out.println("");
+
+
+                if (edge.weight <= v.dist && (!edge.to.isVisited || !v.isVisited)) {
+                    bestEdge = edge;
+                    v.dist = edge.weight;
+                    edge.to.dist = edge.weight;
+
+                    //System.out.println(edge.to);
+                    //System.out.println(vertexMinHeap.getPosition(edge.to));
+                    vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to));
+                    //System.out.println(vertexMinHeap.getPosition(edge.to));
+                    //System.out.println("");
+                }
+            }*/
+
+
+            //System.out.println(bestEdge);
+            //if(bestEdge != null){
+            //treeDist += bestEdge.weight;
+            //bestEdge.to.isVisited = true;
+            //edgeTree.add(bestEdge);
+            //}
+
         }
 
-        System.out.println("Minimum spanning tree Dsitance: " +MST);
-
-        //for(int i=0; i< matrixegdegraph.length;i++)
-        //{
-        //    System.out.println(" parent "+ predecessor[i] + " to " + i + " EdgeWeight: " + Distance[i]);
-        //}
+        System.out.println("");
+        System.out.println("graph: " + edgeTree);
+        for (Edge edge: edgeTree) {
+            treeDist += edge.weight;
+        }
+        System.out.println(treeDist);
     }
-
-}
-
-class Pair implements Comparable<Pair>{
-   Integer distance;
-   Integer index;
-
-   public Pair(Integer distance, Integer index){
-       this.distance=distance;
-       this.index = index;
-   }
-
-   @Override
-   public int compareTo(Pair p){
-       return this.distance.compareTo(p.distance);
-   }
 }

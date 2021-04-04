@@ -38,10 +38,11 @@ class Vertex implements Comparable<Vertex>{
     String name;
     ArrayList<Edge> OutEdges;
     Integer dist = Integer.MAX_VALUE;
+    boolean isVisited = false;
 
     public Vertex(String id){
-        name=id;
-        OutEdges=new ArrayList<Edge>();
+        name = id;
+        OutEdges = new ArrayList<>();
     }
 
     public void addOutEdge(Edge e) {
@@ -71,6 +72,16 @@ class Edge implements Comparable<Edge> {
     Integer weight;
     Vertex from;
     Vertex to;
+    boolean isFound = false;
+
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "weight=" + weight +
+                ", from=" + from.name +
+                ", to=" + to.name +
+                '}';
+    }
 
     public Edge(Vertex from, Vertex to, Integer cost){
         this.from=from;
@@ -81,6 +92,10 @@ class Edge implements Comparable<Edge> {
 
     @Override
     public int compareTo(Edge o) {
-        return this.weight.compareTo(o.weight);
+        if (this.weight<o.weight)
+            return -1;
+        if (this.weight>o.weight)
+            return 1;
+        return 0;
     }
 }

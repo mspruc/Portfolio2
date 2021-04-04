@@ -11,8 +11,8 @@ public class Main {
             adjacencyGraph.addVertex(stringVertexEntry.getValue()); //fetch the value from the key-value pair which is a vertex and add it to the adjacency graph
         }
 
-        MatrixGraph matrixGraph = new MatrixGraph(dataGirl.edges, adjacencyGraph.vertices);
-        matrixGraph.MSTPrims();
-        System.out.println(adjacencyGraph.vertices);
+        MatrixGraph matrixGraph = new MatrixGraph(dataGirl.edges,adjacencyGraph);
+        matrixGraph.MST2ElECTRICBOOGALOO();
+
     }
 }
