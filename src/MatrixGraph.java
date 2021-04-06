@@ -13,6 +13,44 @@ public class MatrixGraph {
         this.vertices = adjacencyGraph.vertices;
     }
 
+    public void mst3(){
+        int mst = 0;
+        MinHeap<Vertex> vertexMinHeap = new MinHeap<>();
+
+        for (Vertex v : vertices){
+            vertexMinHeap.insert(v); //send all vertices to the minheap
+        }
+
+        Vertex v1 = vertices.get(0);
+        v1.dist = 0;
+
+        while (!vertexMinHeap.isEmpty()){
+            Vertex smallest = vertexMinHeap.extractMin();
+
+            System.out.println("Analysing vertex: " + smallest);
+
+            Edge bestEdge = null;
+            for (Edge edge : smallest.OutEdges) {
+                //System.out.println(edge + " " + edge.to.dist);
+                if(edge.weight < edge.to.dist){
+                    if(!edge.to.isVisited) {
+                        System.out.println("Replacing: " + bestEdge + " with: " + edge);
+                        edge.to.dist = edge.weight;
+                        bestEdge = edge;
+                        vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to));
+                        edgeTree.add(bestEdge);
+                        mst+=bestEdge.weight;
+                        bestEdge.from.isVisited = true;
+                    }
+                }
+            }
+            if(bestEdge != null){
+                System.out.println("picked edge: " + bestEdge);}
+            System.out.println(" ");
+        }
+        System.out.println(mst);
+    }
+
     public void MST2ElECTRICBOOGALOO(){
 
         MinHeap<Edge> edgeMinHeap = new MinHeap<>();

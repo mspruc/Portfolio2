@@ -50,6 +50,7 @@ public class MinHeap<T extends Comparable<T> >{
 
     public void decreaseKey(int pos){
         int currentpos=pos;
+
         while (minheap.get(currentpos).compareTo(minheap.get(Parent(currentpos)))<0){
             swap(currentpos,Parent(currentpos));
             currentpos=Parent(currentpos);

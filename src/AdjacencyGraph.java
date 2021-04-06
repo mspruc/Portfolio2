@@ -64,6 +64,7 @@ class Vertex implements Comparable<Vertex>{
                 "name='" + name + '\'' +
                 ", OutEdges=" + OutEdges +
                 ", dist=" + dist +
+                ", isVisited=" + isVisited +
                 '}';
     }
 }
