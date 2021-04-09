@@ -17,29 +17,36 @@ public class MatrixGraph {
         int mst = 0;                                         //init the length of the mst.
         MinHeap<Vertex> vertexMinHeap = new MinHeap<>();     //init min heap
         for (Vertex v : vertices) vertexMinHeap.insert(v);   //send all vertices to the minheap
-        Vertex v1 = vertices.get(0);                         //fetch the first arbitrary vertex
-        v1.dist = 0;                                         //set the dist to zero so it is the first vertex to be found by the minheap
-        ArrayList<Edge> discoveredEdges = new ArrayList<>(); //add all the out edges to a list of all discovered out edges
+        Vertex smallest = vertexMinHeap.extractMin();
+        smallest.isVisited = true;
+
+        for (Edge edge : smallest.OutEdges) {
+            if(edge.weight <= edge.to.dist){
+                edge.to.dist = edge.weight; //update the dist in the vertex we are travelling to.
+                vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to)); //decrease the key in the heap for the to-vertex.
+            }
+        }
 
         while (!vertexMinHeap.isEmpty()){                 //so long as the heap is not empty
-            Vertex smallest = vertexMinHeap.extractMin(); //we fetch the vertex with the smallest dist.
+            smallest = vertexMinHeap.extractMin();        //we fetch the vertex with the smallest dist.
             Edge bestEdge = null;                         //init the best edge for the vertex to pick
-            discoveredEdges.addAll(smallest.OutEdges);    //add all the edges from the vertex to a list of discovered edges.
 
-            for (Edge edge : discoveredEdges) { //scan through all the discovered edges
-                System.out.println("Analysing edge: " + edge + " with: " + bestEdge + " saved vertex to.dist: " + edge.to.dist);
-                if(edge.weight <= edge.to.dist && (bestEdge == null || edge.weight < bestEdge.weight) && !edge.to.isVisited){
-                    bestEdge = edge;            //set the edge that passes the conditionals to be the best edge
+            for (Edge edge : smallest.OutEdges) { //scan through all the discovered edges
+                //System.out.println("Analysing edge: " + edge + " with: " + bestEdge + " saved vertex to.dist: " + edge.to.dist);
+                if(edge.weight <= edge.to.dist){
                     edge.to.dist = edge.weight; //update the dist in the vertex we are travelling to.
+                    vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to)); //decrease the key in the heap for the to-vertex.
                 }
+
+                if ((bestEdge == null || edge.weight < bestEdge.weight) && ((!edge.to.isVisited && edge.from.isVisited) || (!edge.from.isVisited && edge.to.isVisited))) bestEdge = edge;            //set the edge that passes the conditionals to be the best edge
+
             } //when the forloop ends we should have the best edge to pick saved in bestEdge.
 
-            if(bestEdge != null){
-                vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(bestEdge.to)); //decrease the key in the heap for the to-vertex.
-                bestEdge.to.isVisited = true;                                      //it is now visited
+            if(bestEdge != null) {
                 edgeTree.add(bestEdge);                                            //add the edge to the spanning tree
-                System.out.println("picking edge: " + bestEdge);
-                System.out.println();
+                //System.out.println("picking edge: " + bestEdge + " for: " + smallest.name);
+                smallest.isVisited = true;
+                //System.out.println();
             }
         }
 

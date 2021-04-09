@@ -73,7 +73,6 @@ class Edge implements Comparable<Edge> {
     Integer weight;
     Vertex from;
     Vertex to;
-    boolean isFound = false;
 
     @Override
     public String toString() {
