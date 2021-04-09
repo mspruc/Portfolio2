@@ -14,39 +14,38 @@ public class MatrixGraph {
     }
 
     public void mst3(){
-        int mst = 0;                                         //init the length of the mst.
-        MinHeap<Vertex> vertexMinHeap = new MinHeap<>();     //init min heap
-        for (Vertex v : vertices) vertexMinHeap.insert(v);   //send all vertices to the minheap
-        Vertex smallest = vertexMinHeap.extractMin();
-        smallest.isVisited = true;
+        int mst = 0;                                       //init the length of the mst.
+        MinHeap<Vertex> vertexMinHeap = new MinHeap<>();   //init min heap
+        for (Vertex v : vertices) vertexMinHeap.insert(v); //send all vertices to the minheap
+        Vertex smallest = vertexMinHeap.extractMin();      //fetch the arbitrary first vertex
+        smallest.isVisited = true;                         //set it to be visited
 
-        for (Edge edge : smallest.OutEdges) {
-            if(edge.weight <= edge.to.dist){
-                edge.to.dist = edge.weight; //update the dist in the vertex we are travelling to.
+        for (Edge edge : smallest.OutEdges) {                                  //Then init all routes from that vertex
+            if(edge.weight <= edge.to.dist){                                   //
+                edge.to.dist = edge.weight;                                    //update the dist in the vertex we are travelling to.
                 vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to)); //decrease the key in the heap for the to-vertex.
             }
         }
 
-        while (!vertexMinHeap.isEmpty()){                 //so long as the heap is not empty
-            smallest = vertexMinHeap.extractMin();        //we fetch the vertex with the smallest dist.
-            Edge bestEdge = null;                         //init the best edge for the vertex to pick
+        while (!vertexMinHeap.isEmpty()){          //so long as the heap is not empty
+            smallest = vertexMinHeap.extractMin(); //we fetch the vertex with the smallest dist.
+            Edge bestEdge = null;                  //init the best edge for the vertex to pick
 
-            for (Edge edge : smallest.OutEdges) { //scan through all the discovered edges
-                //System.out.println("Analysing edge: " + edge + " with: " + bestEdge + " saved vertex to.dist: " + edge.to.dist);
-                if(edge.weight <= edge.to.dist){
-                    edge.to.dist = edge.weight; //update the dist in the vertex we are travelling to.
+            for (Edge edge : smallest.OutEdges) {                                  //scan through all the discovered edges
+                if(edge.weight <= edge.to.dist){                                   //
+                    edge.to.dist = edge.weight;                                    //update the dist in the vertex we are travelling to.
                     vertexMinHeap.decreaseKey(vertexMinHeap.getPosition(edge.to)); //decrease the key in the heap for the to-vertex.
                 }
 
-                if ((bestEdge == null || edge.weight < bestEdge.weight) && ((!edge.to.isVisited && edge.from.isVisited) || (!edge.from.isVisited && edge.to.isVisited))) bestEdge = edge;            //set the edge that passes the conditionals to be the best edge
+                if ((bestEdge == null || edge.weight < bestEdge.weight)
+                        && ((!edge.to.isVisited && edge.from.isVisited)
+                        || (!edge.from.isVisited && edge.to.isVisited))) bestEdge = edge; //set the edge that passes the conditionals to be the best edge
 
             } //when the forloop ends we should have the best edge to pick saved in bestEdge.
 
             if(bestEdge != null) {
-                edgeTree.add(bestEdge);                                            //add the edge to the spanning tree
-                //System.out.println("picking edge: " + bestEdge + " for: " + smallest.name);
+                edgeTree.add(bestEdge); //add the edge to the spanning tree
                 smallest.isVisited = true;
-                //System.out.println();
             }
         }
 
