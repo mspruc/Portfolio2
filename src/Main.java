@@ -13,6 +13,6 @@ public class Main {
 
         MatrixGraph matrixGraph = new MatrixGraph(dataGirl.edges,adjacencyGraph);
         matrixGraph.mst3();
-        System.out.println(matrixGraph.edgeTree.toString());
+        System.out.println("Edges in mst: " + matrixGraph.edgeTree.toString());
     }
 }

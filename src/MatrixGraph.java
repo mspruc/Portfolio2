@@ -52,6 +52,9 @@ public class MatrixGraph {
         for (Edge edge : edgeTree) { //sum the weights.
             mst += edge.weight;
         }
+
         System.out.println(mst);
+
+        System.out.println("Price of stuff: " + mst*100000);
     }
 }
